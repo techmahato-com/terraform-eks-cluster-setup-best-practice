@@ -1,11 +1,20 @@
+# ----------------------------------------
+# 🌍 AWS Region Variable
+# - Specifies the AWS region where resources will be deployed
+# ----------------------------------------
+
 variable "region" {
-  type        = any
-  default     = "ap-south-1"
-  description = "value of the region where the resources will be created"
+  type        = any  # Allows any data type (string, list, or map)
+  default     = "ap-south-1"  # Default AWS region (Mumbai)
+  description = "Value of the region where the resources will be created."
 }
 
-variable "environments" {
-  type = any
+# ----------------------------------------
+# 🌱 Environment Configuration Variable
+# - Stores environment-specific configurations (e.g., dev, staging, prod)
+# ----------------------------------------
 
-  description = "The environment configuration"
+variable "environments" {
+  type        = any  # Allows flexibility for different types of configurations
+  description = "The environment configuration."
 }
