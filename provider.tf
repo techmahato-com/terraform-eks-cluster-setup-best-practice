@@ -7,7 +7,7 @@
 terraform {
   # 🎯 Backend Configuration: Storing Terraform State in S3
   backend "s3" {
-    bucket = "devsecops-backend-codedevops" # 🔹 S3 bucket for storing state file
+    bucket = "tm-devsecops-backend-codedevops" # 🔹 S3 bucket for storing state file
     key    = "secops-dev.tfstate"           # 🔹 Path to the state file in S3
     region = "ap-south-1"                   # 🔹 AWS region where the S3 bucket is located
   }
@@ -38,7 +38,7 @@ terraform {
 
 provider "aws" {
   region              = var.region  # 🔹 AWS region, defined as a variable
-  allowed_account_ids = ["434605749312"]  # 🔹 Restrict Terraform to this AWS account
+  allowed_account_ids = ["739275478550"]  # 🔹 Restrict Terraform to this AWS account
 
   # ✅ Default tags applied to all AWS resources
   default_tags {

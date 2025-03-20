@@ -18,3 +18,6 @@ variable "environments" {
   type        = any  # Allows flexibility for different types of configurations
   description = "The environment configuration."
 }
+
+
+

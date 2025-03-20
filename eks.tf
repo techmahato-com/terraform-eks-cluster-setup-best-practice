@@ -1,12 +1,18 @@
+# ------------------------------
+# AWS EKS Cluster Module
+# ------------------------------
 module "eks" {
-  source                                 = "terraform-aws-modules/eks/aws"
-  version                                = "20.13.1"
+  source      = "terraform-aws-modules/eks/aws"
+  version     = "20.13.1"
+
+  # Cluster Configuration
   cluster_name                           = local.cluster_name
   cluster_version                        = local.cluster_version
   cluster_enabled_log_types              = local.cluster_enabled_log_types
-  cloudwatch_log_group_retention_in_days = 30
-  cluster_endpoint_public_access         = true
+  cloudwatch_log_group_retention_in_days = 30  # Retain logs for 30 days
+  cluster_endpoint_public_access         = true  # Allow public access to the API server
 
+  # Cluster Add-ons (CNI, CoreDNS, Kube-Proxy)
   cluster_addons = {
     coredns = {
       most_recent                 = true
@@ -22,26 +28,30 @@ module "eks" {
     }
   }
 
+  # VPC & Networking Configuration
   vpc_id     = local.vpc_id
   subnet_ids = local.public_subnet_ids
+
+  # Managed Node Groups (Worker Nodes)
   eks_managed_node_group_defaults = {
-    ## This instance type (m6a.large) is a placeholder and will not be used in the actual deployment.
-
+    # This is a placeholder and will not affect actual deployment
   }
-
   eks_managed_node_groups = local.eks_managed_node_groups
 
+  # Security Groups
   cluster_security_group_additional_rules = local.cluster_security_group_additional_rules
 
+  # RBAC Permissions for Cluster Admins
   enable_cluster_creator_admin_permissions = false
 
+  # IAM Access Configuration for EKS Users
   access_entries = {
-    for k in local.eks_access_entries : k.username => {
+    for user in local.eks_access_entries : user.username => {
       kubernetes_groups = []
-      principal_arn     = k.username
+      principal_arn     = user.username
       policy_associations = {
         single = {
-          policy_arn = k.access_policy
+          policy_arn = user.access_policy
           access_scope = {
             type = "cluster"
           }
@@ -49,11 +59,17 @@ module "eks" {
       }
     }
   }
+
+  # Tags for Resource Management
   tags = local.default_tags
 }
-#Role for vpc cni
+
+# ------------------------------
+# IAM Role for VPC CNI Add-on
+# ------------------------------
 resource "aws_iam_role" "vpc_cni" {
   name               = "${local.prefix}-vpc-cni"
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -74,8 +90,9 @@ resource "aws_iam_role" "vpc_cni" {
 }
 EOF
 }
+
+# Attach EKS CNI Policy to IAM Role
 resource "aws_iam_role_policy_attachment" "vpc_cni" {
   role       = aws_iam_role.vpc_cni.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
-
 }

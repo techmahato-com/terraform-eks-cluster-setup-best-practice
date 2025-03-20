@@ -8,10 +8,10 @@ environments = {
     cluster_name                   = "codedevops-cluster"  # Name of the EKS cluster
     env                            = "default"  # Environment name (e.g., dev, staging, prod)
     region                         = "ap-south-1"  # AWS region for deployment
-    vpc_id                         = "vpc-02af529e05c41b6bb"  # ID of the VPC where the cluster will be deployed
-    vpc_cidr                       = "10.0.0.0/16"  # CIDR block of the VPC
-    public_subnet_ids              = ["subnet-09aeb297a112767b2", "subnet-0e25e76fb4326ce99"]  # List of public subnet IDs
-    cluster_version                = "1.29"  # Kubernetes version for EKS
+    vpc_id                         = "vpc-0ca2e9fe5c9f19220"  # ID of the VPC where the cluster will be deployed
+    vpc_cidr                       = "172.31.0.0/16"  # CIDR block of the VPC
+    public_subnet_ids              = ["subnet-0637c498788ead8c0", "subnet-0133ea14443736511", "subnet-0c07401b08a854963"]  # List of public subnet IDs
+    cluster_version                = "1.31"  # Kubernetes version for EKS
     cluster_endpoint_public_access = true  # Allows public access to the EKS API server
     ecr_names                      = ["codedevops"]  # List of Elastic Container Registry (ECR) names
 
@@ -25,7 +25,7 @@ environments = {
         min_size       = 1  # Minimum number of worker nodes
         max_size       = 1  # Maximum number of worker nodes
         desired_size   = 1  # Desired number of worker nodes
-        instance_types = ["m5a.xlarge"]  # EC2 instance type for worker nodes
+        instance_types = ["m5a.large"]  # EC2 instance type for worker nodes
         capacity_type  = "SPOT"  # Defines whether nodes are on-demand or spot instances
         disk_size      = 60  # Root volume size (in GB)
         ebs_optimized  = true  # Enables EBS-optimized instances for better performance
@@ -64,7 +64,7 @@ environments = {
         user_arn = []  # Users with read-only access (empty for now)
       }
       admin = {
-        user_arn = ["arn:aws:iam::434605749312:root"]  # Users with admin access to EKS
+        user_arn = ["arn:aws:iam::739275478550:root"]  # Users with admin access to EKS
       }
     }
 
